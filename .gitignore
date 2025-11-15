@@ -1,0 +1,7 @@
+# 忽略临时数据和构建目录
+/data/
+/dist/
+
+# Python 缓存
+__pycache__/
+*.pyc

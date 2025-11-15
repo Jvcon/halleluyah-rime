@@ -1,0 +1,48 @@
+name: Build and Commit Rime Dictionaries
+
+on:
+  # 允许手动触发此工作流
+  workflow_dispatch:
+  # 也可以设置为定时运行，例如每天一次
+  # schedule:
+  #   - cron: '0 0 * * *'
+  # 或者在代码推送到 main 分支时触发
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**' # 当构建脚本变化时触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      # 需要写入权限来提交代码
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run build script to generate dictionary files
+        run: python -m src
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(bot): Automatic update of Rime dictionaries"
+          # 指定要提交的文件模式。
+          # 这确保只有我们想要的文件被提交。
+          file_pattern: "dicts/*.yaml lua/*.json lua/*.lua"
+          commit_user_name: "GitHub Actions Bot"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_author: "GitHub Actions Bot <github-actions[bot]@users.noreply.github.com>"

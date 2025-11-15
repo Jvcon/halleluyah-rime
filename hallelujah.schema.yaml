@@ -1,0 +1,37 @@
+# Rime schema
+# encoding: utf-8
+# 方案说明
+schema:
+  schema_id: hallelujah
+  name: 英文输入法
+  version: "0.1"
+  author:
+    - jvcon
+  description: |
+    Hallelujay的RIME部分适配版！
+
+switches:
+  - name: ipa_hint
+    states: [ 读音关, 读音开 ]
+  - name: fuzzy
+    states: [ 模糊关, 模糊开 ]
+
+engine:
+  processors:
+    - ascii_composer
+    - key_binder
+    - speller
+    - punctuator
+    - selector
+    - express_editor
+  segmentors:
+    - ascii_segmentor
+    - matcher
+    - abc_segmentor
+    - punct_segmentor
+    - fallback_segmentor
+  translators:
+    - punct_translator
+    - script_translator
+  filters:
+    - uniquifier
